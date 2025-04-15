@@ -76,7 +76,24 @@ export class PlayerCard {
         cardBody.appendChild(buttonSection);
         card.appendChild(cardBody);
 
-        eliminateBtn.addEventListener("click", () => {
+        const toggleProtect = (e) => {
+            e.preventDefault();
+
+            if (this.isEliminated) return;
+
+            this.isProtected = !this.isProtected;
+            protectBtn.className = this.isProtected
+                ? "btn btn-info"
+                : "btn btn-outline-info";
+            card.classList.toggle("border-info");
+            if (typeof this.onProtect === "function") {
+                this.onProtect(this.isProtected);
+            }
+        };
+
+        const toggleEliminate = (e) => {
+            e.preventDefault();
+
             if (this.isProtected) return;
 
             this.isEliminated = !this.isEliminated;
@@ -84,24 +101,17 @@ export class PlayerCard {
                 ? "btn btn-danger"
                 : "btn btn-outline-danger";
 
-            card.style.borderColor = this.isEliminated ? "#FF0000" : "";
-
+            card.classList.toggle("border-danger");
             if (typeof this.onEliminate === "function") {
                 this.onEliminate();
             }
-        });
+        };
 
-        protectBtn.addEventListener("click", () => {
-            if (this.isEliminated) return;
+        eliminateBtn.addEventListener("click", toggleEliminate);
+        eliminateBtn.addEventListener("touchend", toggleEliminate);
 
-            this.isProtected = !this.isProtected;
-            protectBtn.className = this.isProtected
-                ? "btn btn-info"
-                : "btn btn-outline-info";
-            if (typeof this.onProtect === "function") {
-                this.onProtect(this.isProtected);
-            }
-        });
+        protectBtn.addEventListener("click", toggleProtect);
+        protectBtn.addEventListener("touchend", toggleProtect);
 
         return card;
     }

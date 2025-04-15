@@ -68,14 +68,6 @@ function createPlayerCard(player) {
             player.name.slice(1).toLowerCase(),
         role: player.role,
         isProtected: player.isProtected,
-        onKill: () => {
-            alert(`O jogador ${player.name} foi eliminado.`);
-            // Lógica adicional se desejar
-        },
-        onProtect: (status) => {
-            console.log(`${player.name} proteção: ${status}`);
-            // Lógica adicional se necessário
-        },
     }).render();
     col.appendChild(card);
     return col;
