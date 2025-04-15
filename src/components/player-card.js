@@ -86,6 +86,7 @@ export class PlayerCard {
                 ? "btn btn-info"
                 : "btn btn-outline-info";
             card.classList.toggle("border-info");
+            protectBtn.offsetHeight;
             if (typeof this.onProtect === "function") {
                 this.onProtect(this.isProtected);
             }
@@ -102,6 +103,7 @@ export class PlayerCard {
                 : "btn btn-outline-danger";
 
             card.classList.toggle("border-danger");
+            eliminateBtn.offsetHeight;
             if (typeof this.onEliminate === "function") {
                 this.onEliminate();
             }
