@@ -33,7 +33,7 @@ export const createRoleSetupModal = (currentRolesSetup, onSave) => {
 
         roles.forEach((role) => {
             const roleId = String(role.id);
-            const color = role.color.split("-")[1];
+            const color = role.color;
 
             const roleContainer = document.createElement("div");
             roleContainer.className = "d-flex align-items-center gap-2";
