@@ -1,5 +1,3 @@
-import { savePlayers, loadPlayers } from "../utils/storage.js";
-
 export const createPlayersSetupModal = (currentPlayers, maxPlayers, onSave) => {
     const modal = document.createElement("div");
     modal.className = "modal fade";
@@ -28,7 +26,7 @@ export const createPlayersSetupModal = (currentPlayers, maxPlayers, onSave) => {
             removeButton.innerHTML = `<i class="fa-solid fa-trash"></i>`;
 
             removeButton.addEventListener("click", () => {
-                players.splice(index, 1); // Remove the player
+                players.splice(index, 1);
                 updatePlayerList();
             });
 
@@ -74,22 +72,22 @@ export const createPlayersSetupModal = (currentPlayers, maxPlayers, onSave) => {
         const playerName = input.value.trim();
 
         if (playerName && players.length < maxPlayers) {
-            players.push(playerName); // Add the player
-            input.value = ""; // Clear the input
+            players.push(playerName);
+            input.value = "";
             updatePlayerList();
         }
     });
 
     modal.querySelector("#save-players-btn").addEventListener("click", () => {
         if (typeof onSave === "function") {
-            onSave(players); // Save the updated players list
+            onSave(players);
         }
         const bootstrapModal = bootstrap.Modal.getInstance(modal);
         bootstrapModal.hide();
     });
 
     modal.addEventListener("show.bs.modal", () => {
-        updatePlayerList(); // Update the player list when the modal is shown
+        updatePlayerList();
     });
 
     document.body.appendChild(modal);

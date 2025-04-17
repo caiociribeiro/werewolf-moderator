@@ -3,14 +3,14 @@ import { showPlayerStatusModal } from "./player-status-modal.js";
 export class PlayerCard {
     /**
      * @param {Object} player
-     * @param {string} player.name - Name of the player.
-     * @param {Object} player.role - Role object of the player.
-     * @param {string} player.role.name - Name of the role.
-     * @param {string} player.role.color - Color of the role.
-     * @param {boolean} [player.isProtected=false] - Protection state.
-     * @param {boolean} [player.isEliminated=false] - Elimination state.
-     * @param {Function} [player.onEliminate] - Callback for elimination action.
-     * @param {Function} [player.onProtect] - Callback for protection action.
+     * @param {string} player.name - Nome do player.
+     * @param {Object} player.role - Role do player.
+     * @param {string} player.role.name - Nome da role.
+     * @param {string} player.role.color - String que representa o tipo de cor da role (bootstrap).
+     * @param {boolean} [player.isProtected=false] - Estado de proteção do player.
+     * @param {boolean} [player.isEliminated=false] - Estado de eliminação do player.
+     * @param {Function} [player.onEliminate] - Callback para ação de eliminação.
+     * @param {Function} [player.onProtect] - Callback para ação de proteção.
      */
     constructor({
         name,

@@ -3,8 +3,8 @@ const PLAYERS_KEY = "players-list";
 const GAME_STATE_KEY = "game-state";
 
 /**
- * Save the roles setup to localStorage.
- * @param {Object} rolesSetup - The roles setup object to save.
+ * Salva o setup de roles no localStorage.
+ * @param {Object} rolesSetup - O objeto rolesSetup para salvar.
  */
 export const saveGameSetup = (rolesSetup) => {
     try {
@@ -15,8 +15,8 @@ export const saveGameSetup = (rolesSetup) => {
 };
 
 /**
- * Load the roles setup from localStorage.
- * @returns {Object} The roles setup object, or an empty object if not found.
+ * Carrega o setup de roles do localStorage.
+ * @returns {Object} O objeto rolesSetup, ou um objeto vazio se não encontrado.
  */
 export const loadGameSetup = () => {
     try {
@@ -29,8 +29,8 @@ export const loadGameSetup = () => {
 };
 
 /**
- * Save the players list to localStorage.
- * @param {Array} players - The list of players to save.
+ * Salva a lista de jogadores no localStorage.
+ * @param {Array} players - A lista de jogadores a salvar.
  */
 export const savePlayers = (players) => {
     try {
@@ -41,8 +41,8 @@ export const savePlayers = (players) => {
 };
 
 /**
- * Load the players list from localStorage.
- * @returns {Array} The list of players, or an empty array if not found.
+ * Carrega a lista de jogadores do localStorage.
+ * @returns {Array} A lista de jogadores, ou um array vazio se não encontrado.
  */
 export const loadPlayers = () => {
     try {
@@ -55,8 +55,8 @@ export const loadPlayers = () => {
 };
 
 /**
- * Save the game state to localStorage.
- * @param {Object} gameState - The current game state to save.
+ * Salva o estado do jogo no localStorage.
+ * @param {Object} gameState - O estado do jogo a salvar.
  */
 export const saveGameState = (gameState) => {
     try {
@@ -67,8 +67,8 @@ export const saveGameState = (gameState) => {
 };
 
 /**
- * Load the game state from localStorage.
- * @returns {Object} The game state, or an empty object if not found.
+ * Carrega o estado do jogo do localStorage.
+ * @returns {Object} O estado do jogo, ou um objeto vazio se não encontrado.
  */
 export const loadGameState = () => {
     try {

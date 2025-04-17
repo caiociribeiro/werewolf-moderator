@@ -8,21 +8,19 @@ export const createRoleSetupModal = (currentRolesSetup, onSave) => {
     modal.setAttribute("aria-labelledby", "roles-setup-modal-label");
     modal.setAttribute("aria-hidden", "true");
 
-    // Initialize rolesSetup with default values (0) for all roles
     let rolesSetup = { ...currentRolesSetup };
     roles.forEach((role) => {
-        const roleId = String(role.id); // Ensure the key is a string
+        const roleId = String(role.id);
         if (typeof rolesSetup[roleId] !== "number") {
-            rolesSetup[roleId] = 0; // Initialize as a number
+            rolesSetup[roleId] = 0;
         }
     });
 
     const updateTotalRoles = () => {
         const totalRoles = Object.values(rolesSetup)
-            .map((count) => Number(count)) // Ensure all values are numbers
+            .map((count) => Number(count))
             .reduce((sum, count) => sum + count, 0);
 
-        // Always reference the correct DOM element inside the modal
         const totalRolesElement = modal.querySelector("#total-roles-selected");
         if (totalRolesElement) {
             totalRolesElement.textContent = `${totalRoles} roles selected`;
@@ -31,7 +29,7 @@ export const createRoleSetupModal = (currentRolesSetup, onSave) => {
 
     const rebuildRolesList = () => {
         const rolesList = modal.querySelector("#roles-list");
-        rolesList.innerHTML = ""; // Clear the list before rebuilding
+        rolesList.innerHTML = "";
 
         roles.forEach((role) => {
             const roleId = String(role.id);
@@ -106,15 +104,15 @@ export const createRoleSetupModal = (currentRolesSetup, onSave) => {
 
     modal.querySelector("#save-roles-btn").addEventListener("click", () => {
         if (typeof onSave === "function") {
-            onSave(rolesSetup); // Save the updated roles setup
+            onSave(rolesSetup);
         }
         const bootstrapModal = bootstrap.Modal.getInstance(modal);
         bootstrapModal.hide();
     });
 
     modal.addEventListener("show.bs.modal", () => {
-        rebuildRolesList(); // Rebuild the roles list when the modal is shown
-        updateTotalRoles(); // Update the total roles count
+        rebuildRolesList();
+        updateTotalRoles();
     });
 
     document.body.appendChild(modal);
