@@ -1,14 +1,14 @@
-import { roleColors } from "../data/roleColors.js";
-
 export class PlayerCard {
     /**
      * @param {Object} player
-     * @param {string} player.name - Nome do jogador.
-     * @param {string} player.role - Role do jogador.
-     * @param {boolean} [player.isProtected=false] - Estado de proteção.
-     * @param {boolean} [player.isEliminated=false] - Estado de eliminação.
-     * @param {Function} [player.onEliminate] - Callback para a ação de eliminação.
-     * @param {Function} [player.onProtect] - Callback para a ação de proteger.
+     * @param {string} player.name - Name of the player.
+     * @param {Object} player.role - Role object of the player.
+     * @param {string} player.role.name - Name of the role.
+     * @param {string} player.role.color - Color of the role.
+     * @param {boolean} [player.isProtected=false] - Protection state.
+     * @param {boolean} [player.isEliminated=false] - Elimination state.
+     * @param {Function} [player.onEliminate] - Callback for elimination action.
+     * @param {Function} [player.onProtect] - Callback for protection action.
      */
     constructor({
         name,
@@ -28,8 +28,7 @@ export class PlayerCard {
 
     render() {
         const card = document.createElement("div");
-        const roleColor = roleColors[this.role];
-        card.className = `card mb-3 p-0 ${roleColor}`;
+        card.className = `card mb-3 p-0 ${this.role.color}`;
 
         const cardBody = document.createElement("div");
         cardBody.className = "card-body row";
@@ -44,8 +43,8 @@ export class PlayerCard {
         infoSection.appendChild(name);
 
         const role = document.createElement("h3");
-        role.className = "text-nowrap text-start m-0";
-        role.textContent = this.role;
+        role.className = "text-nowrap text-start m-0 text-capitalize";
+        role.textContent = this.role.name;
         infoSection.appendChild(role);
 
         const buttonSection = document.createElement("div");
@@ -56,13 +55,17 @@ export class PlayerCard {
             "d-flex flex-column justify-content-center gap-2";
 
         const protectBtn = document.createElement("button");
-        protectBtn.className = "btn btn-outline-info";
+        protectBtn.className = this.isProtected
+            ? "btn btn-info"
+            : "btn btn-outline-info";
         const shieldIcon = document.createElement("i");
         shieldIcon.className = "fas fa-shield-alt";
         protectBtn.appendChild(shieldIcon);
 
         const eliminateBtn = document.createElement("button");
-        eliminateBtn.className = "btn btn-outline-danger";
+        eliminateBtn.className = this.isEliminated
+            ? "btn btn-danger"
+            : "btn btn-outline-danger";
         const eliminateIcon = document.createElement("i");
         eliminateIcon.className = "fa-solid fa-skull-crossbones";
         eliminateBtn.appendChild(eliminateIcon);
@@ -76,6 +79,11 @@ export class PlayerCard {
         cardBody.appendChild(buttonSection);
         card.appendChild(cardBody);
 
+        const forceReflow = (element) => {
+            // Force a reflow to ensure styles are applied immediately
+            element.offsetHeight;
+        };
+
         const toggleProtect = (e) => {
             e.preventDefault();
 
@@ -85,8 +93,8 @@ export class PlayerCard {
             protectBtn.className = this.isProtected
                 ? "btn btn-info"
                 : "btn btn-outline-info";
+            forceReflow(protectBtn); // Force reflow for mobile compatibility
             card.classList.toggle("border-info");
-            protectBtn.offsetHeight;
             if (typeof this.onProtect === "function") {
                 this.onProtect(this.isProtected);
             }
@@ -101,19 +109,15 @@ export class PlayerCard {
             eliminateBtn.className = this.isEliminated
                 ? "btn btn-danger"
                 : "btn btn-outline-danger";
-
+            forceReflow(eliminateBtn); // Force reflow for mobile compatibility
             card.classList.toggle("border-danger");
-            eliminateBtn.offsetHeight;
             if (typeof this.onEliminate === "function") {
-                this.onEliminate();
+                this.onEliminate(this.isEliminated);
             }
         };
 
         eliminateBtn.addEventListener("click", toggleEliminate);
-        eliminateBtn.addEventListener("touchend", toggleEliminate);
-
         protectBtn.addEventListener("click", toggleProtect);
-        protectBtn.addEventListener("touchend", toggleProtect);
 
         return card;
     }
