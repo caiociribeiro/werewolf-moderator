@@ -1,4 +1,10 @@
-export function showConfirmModal({ title, message, onConfirm }) {
+export const showConfirmModal = ({
+    title,
+    message,
+    cancelLabel,
+    confirmLabel,
+    onConfirm,
+}) => {
     const existingModal = document.getElementById("confirm-modal");
     if (existingModal) existingModal.remove();
 
@@ -12,39 +18,36 @@ export function showConfirmModal({ title, message, onConfirm }) {
     modal.innerHTML = `
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header border-0">
                     <h5 class="modal-title" id="confirm-modal-label">${title}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>${message}</p>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="confirm-btn">Confirm</button>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">${cancelLabel}</button>
+                    <button type="button" class="btn btn-primary" id="confirm-btn">${confirmLabel}</button>
                 </div>
             </div>
         </div>
     `;
 
-    // Add event listener for the Confirm button
     modal.querySelector("#confirm-btn").addEventListener("click", () => {
         if (typeof onConfirm === "function") {
-            onConfirm(); // Execute the callback
+            onConfirm();
         }
         const bootstrapModal = bootstrap.Modal.getInstance(modal);
         if (bootstrapModal) {
-            bootstrapModal.hide(); // Hide the modal
+            bootstrapModal.hide();
         }
     });
 
-    // Append the modal to the body and show it
     document.body.appendChild(modal);
     const bootstrapModal = new bootstrap.Modal(modal);
     bootstrapModal.show();
 
-    // Remove the modal from the DOM after it is hidden
     modal.addEventListener("hidden.bs.modal", () => {
         modal.remove();
     });
-}
+};

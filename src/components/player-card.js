@@ -1,3 +1,5 @@
+import { showPlayerStatusModal } from "./player-status-modal.js";
+
 export class PlayerCard {
     /**
      * @param {Object} player
@@ -28,96 +30,79 @@ export class PlayerCard {
 
     render() {
         const card = document.createElement("div");
-        card.className = `card mb-3 p-0 ${this.role.color}`;
+        card.className = `card m-2 p-0 bg-${this.role.color}-subtle col-12`;
+        card.style.cursor = "pointer";
+        card.style.maxWidth = "20rem";
 
         const cardBody = document.createElement("div");
-        cardBody.className = "card-body row";
+        cardBody.className = "card-body card-sm row";
 
         const infoSection = document.createElement("div");
         infoSection.className =
             "col d-flex flex-column justify-content-center p-2";
 
         const name = document.createElement("div");
-        name.className = "text-capitalize fs-6 text-start";
+        name.className = "text-capitalize fs-6 text-center";
         name.textContent = this.name;
         infoSection.appendChild(name);
 
-        const role = document.createElement("h3");
-        role.className = "text-nowrap text-start m-0 text-capitalize";
+        const role = document.createElement("h2");
+        role.className = "text-nowrap text-center m-0 text-capitalize";
         role.textContent = this.role.name;
         infoSection.appendChild(role);
 
-        const buttonSection = document.createElement("div");
-        buttonSection.className = "col d-flex justify-content-end";
+        const statusIconContainer = document.createElement("div");
+        statusIconContainer.className = "d-flex justify-content-end";
 
-        const buttonContainer = document.createElement("div");
-        buttonContainer.className =
-            "d-flex flex-column justify-content-center gap-2";
+        const statusIcon = document.createElement("i");
+        const protectIcon = "fa-solid fa-shield-alt text-info invisible";
+        const eliminateIcon = "fas fa-skull-crossbones text-danger invisible";
+        statusIcon.className = protectIcon;
 
-        const protectBtn = document.createElement("button");
-        protectBtn.className = this.isProtected
-            ? "btn btn-info"
-            : "btn btn-outline-info";
-        const shieldIcon = document.createElement("i");
-        shieldIcon.className = "fas fa-shield-alt";
-        protectBtn.appendChild(shieldIcon);
-
-        const eliminateBtn = document.createElement("button");
-        eliminateBtn.className = this.isEliminated
-            ? "btn btn-danger"
-            : "btn btn-outline-danger";
-        const eliminateIcon = document.createElement("i");
-        eliminateIcon.className = "fa-solid fa-skull-crossbones";
-        eliminateBtn.appendChild(eliminateIcon);
-
-        buttonContainer.appendChild(protectBtn);
-        buttonContainer.appendChild(eliminateBtn);
-
-        buttonSection.appendChild(buttonContainer);
+        statusIconContainer.appendChild(statusIcon);
 
         cardBody.appendChild(infoSection);
-        cardBody.appendChild(buttonSection);
+        cardBody.appendChild(statusIconContainer);
         card.appendChild(cardBody);
 
-        const forceReflow = (element) => {
-            // Force a reflow to ensure styles are applied immediately
-            element.offsetHeight;
+        const updateCardStatus = () => {
+            card.classList.toggle("border-info", this.isProtected);
+            card.classList.toggle("border-danger", this.isEliminated);
+
+            statusIcon.className = this.isProtected
+                ? protectIcon
+                : eliminateIcon;
+            statusIcon.classList.toggle(
+                "invisible",
+                !this.isProtected && !this.isEliminated
+            );
         };
 
-        const toggleProtect = (e) => {
-            e.preventDefault();
+        card.addEventListener("click", () => {
+            showPlayerStatusModal({
+                player: this,
+                onProtect: () => {
+                    if (this.isEliminated) return;
+                    this.isProtected = !this.isProtected;
+                    if (this.isProtected) this.isEliminated = false;
+                    if (typeof this.onProtect === "function") {
+                        this.onProtect(this.isProtected);
+                    }
+                    updateCardStatus();
+                },
+                onEliminate: () => {
+                    if (this.isProtected) return;
+                    this.isEliminated = !this.isEliminated;
+                    if (this.isEliminated) this.isProtected = false;
+                    if (typeof this.onEliminate === "function") {
+                        this.onEliminate(this.isEliminated);
+                    }
+                    updateCardStatus();
+                },
+            });
+        });
 
-            if (this.isEliminated) return;
-
-            this.isProtected = !this.isProtected;
-            protectBtn.className = this.isProtected
-                ? "btn btn-info"
-                : "btn btn-outline-info";
-            forceReflow(protectBtn); // Force reflow for mobile compatibility
-            card.classList.toggle("border-info");
-            if (typeof this.onProtect === "function") {
-                this.onProtect(this.isProtected);
-            }
-        };
-
-        const toggleEliminate = (e) => {
-            e.preventDefault();
-
-            if (this.isProtected) return;
-
-            this.isEliminated = !this.isEliminated;
-            eliminateBtn.className = this.isEliminated
-                ? "btn btn-danger"
-                : "btn btn-outline-danger";
-            forceReflow(eliminateBtn); // Force reflow for mobile compatibility
-            card.classList.toggle("border-danger");
-            if (typeof this.onEliminate === "function") {
-                this.onEliminate(this.isEliminated);
-            }
-        };
-
-        eliminateBtn.addEventListener("click", toggleEliminate);
-        protectBtn.addEventListener("click", toggleProtect);
+        updateCardStatus();
 
         return card;
     }

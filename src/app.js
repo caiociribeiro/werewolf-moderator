@@ -48,7 +48,6 @@ const updateNewGameButtonState = () => {
 const assignRolesToPlayers = (rolesSetup, players) => {
     const assignedRoles = [];
 
-    // Convert the roles setup into a flat list of roles
     Object.entries(rolesSetup).forEach(([roleId, count]) => {
         const role = roles.find((r) => r.id === Number(roleId));
         for (let i = 0; i < count; i++) {
@@ -56,7 +55,6 @@ const assignRolesToPlayers = (rolesSetup, players) => {
         }
     });
 
-    // Shuffle the roles to randomize the assignment
     for (let i = assignedRoles.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [assignedRoles[i], assignedRoles[j]] = [
@@ -65,7 +63,6 @@ const assignRolesToPlayers = (rolesSetup, players) => {
         ];
     }
 
-    // Assign roles to players
     return players.map((playerName, index) => ({
         name: playerName,
         role: assignedRoles[index],
@@ -74,25 +71,40 @@ const assignRolesToPlayers = (rolesSetup, players) => {
     }));
 };
 
+const updateScores = () => {
+    const wolvesAlive = gameState.players.filter(
+        (player) => player.role.team === "wolves" && !player.isEliminated
+    ).length;
+
+    const villagersAlive = gameState.players.filter(
+        (player) => player.role.team === "village" && !player.isEliminated
+    ).length;
+
+    document.getElementById("wolves-label").textContent = "Wolves";
+    document.getElementById("villagers-label").textContent = "Village";
+
+    const wolvesScoreElement = document.getElementById("wolves-count");
+    const villagersScoreElement = document.getElementById("villagers-count");
+
+    wolvesScoreElement.textContent = `${wolvesAlive}`;
+    villagersScoreElement.textContent = `${villagersAlive}`;
+};
+
 const startGame = () => {
     const gameContainer = document.getElementById("game-container");
-    gameContainer.innerHTML = ""; // Clear the container
+    gameContainer.innerHTML = "";
 
     let assignedPlayers;
 
-    // Use the saved game state if it exists
     if (gameState && gameState.players && gameState.players.length > 0) {
         assignedPlayers = gameState.players;
     } else {
-        // Assign roles to players if no game state exists
         assignedPlayers = assignRolesToPlayers(rolesSetup, players);
 
-        // Save the new game state
         gameState = { players: assignedPlayers };
         saveGameState(gameState);
     }
 
-    // Render player cards
     assignedPlayers.forEach((player) => {
         const playerCard = new PlayerCard({
             name: player.name,
@@ -101,16 +113,20 @@ const startGame = () => {
             isEliminated: player.isEliminated,
             onProtect: (isProtected) => {
                 player.isProtected = isProtected;
-                saveGameState(gameState); // Save the updated game state
+                saveGameState(gameState);
+                updateScores();
             },
             onEliminate: (isEliminated) => {
                 player.isEliminated = isEliminated;
-                saveGameState(gameState); // Save the updated game state
+                saveGameState(gameState);
+                updateScores();
             },
         });
 
         gameContainer.appendChild(playerCard.render());
     });
+
+    updateScores();
 };
 
 function initApp() {
@@ -123,7 +139,19 @@ function initApp() {
         <button id="setup-roles-btn" class="btn btn-primary">Roles</button>
       </div>
       <div id="setup-error" class="text-danger d-none"></div>
-      <div id="game-container" class="row gy-1"></div>
+      <div id="scores-container" class="d-flex justify-content-center my-3">
+        <div id="scores" class="d-flex flex-column">
+            <div id="wolves-score" class="d-flex justify-content-between gap-4">
+               <div id="wolves-label" class="text-start"></div> 
+               <div id="wolves-count" class="text-end"></div>
+            </div>
+            <div id="villagers-score" class="d-flex justify-content-between gap-4">
+               <div id="villagers-label" class="text-start"></div> 
+               <div id="villagers-count" class="text-end"></div>
+            </div>
+        </div>
+      </div>
+      <div id="game-container" class="row px-4 justify-content-center"></div>
     </div>
   `;
 
@@ -137,26 +165,25 @@ function initApp() {
             totalRoles === 0 ||
             players.length !== totalRoles
         ) {
-            updateNewGameButtonState(); // Show the error message
+            updateNewGameButtonState();
         } else {
-            // Check if a game is already running
             if (
                 gameState &&
                 gameState.players &&
                 gameState.players.length > 0
             ) {
-                // Show confirmation modal if a game is already running
                 showConfirmModal({
                     title: "New Game",
                     message:
                         "Are you sure you want to start a new game? The current game will be lost.",
+                    cancelLabel: "Cancel",
+                    confirmLabel: "Start New Game",
                     onConfirm: () => {
-                        gameState = null; // Clear the current game state
-                        startGame(); // Start a new game
+                        gameState = null;
+                        startGame();
                     },
                 });
             } else {
-                // Start the game directly if no game is running
                 startGame();
             }
         }
@@ -173,8 +200,8 @@ function initApp() {
                 players,
                 totalRoles,
                 (updatedPlayers) => {
-                    players = updatedPlayers; // Update the global players list
-                    savePlayers(players); // Save to localStorage
+                    players = updatedPlayers;
+                    savePlayers(players);
                     updateNewGameButtonState();
                 }
             );
@@ -183,14 +210,13 @@ function initApp() {
 
     document.getElementById("setup-roles-btn").addEventListener("click", () => {
         const modal = createRoleSetupModal(rolesSetup, (updatedRolesSetup) => {
-            rolesSetup = updatedRolesSetup; // Update the global rolesSetup
-            saveGameSetup(rolesSetup); // Save to localStorage
+            rolesSetup = updatedRolesSetup;
+            saveGameSetup(rolesSetup);
             updateNewGameButtonState();
         });
         document.body.appendChild(modal);
     });
 
-    // If a game state exists, load it
     if (gameState && gameState.players && gameState.players.length > 0) {
         startGame();
     }

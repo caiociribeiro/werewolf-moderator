@@ -6,7 +6,7 @@ export const roles = [
         isNightRole: true,
         description:
             "Each night, choose a player to kill. Choice has to be unanimous.",
-        color: "bg-danger-subtle",
+        color: "danger",
         image: "",
     },
     {
@@ -16,7 +16,7 @@ export const roles = [
         isNightRole: true,
         description:
             "If the wolf cub dies, the wolves can choose 2 players to eliminate the next night.",
-        color: "bg-danger-subtle",
+        color: "danger",
         image: "",
     },
     {
@@ -26,7 +26,7 @@ export const roles = [
         isNightRole: true,
         description:
             "All roles that detect wolves see the Wolf Man has a villager.",
-        color: "bg-danger-subtle",
+        color: "danger",
         image: "",
     },
     {
@@ -36,7 +36,7 @@ export const roles = [
         isNightRole: false,
         description:
             "Learns which players are on the wolf team the 1st night. The wolves do not learn who the Minion is. Seen as a villager by detection roles.",
-        color: "bg-warning-subtle",
+        color: "warning",
         image: "",
     },
     {
@@ -45,7 +45,7 @@ export const roles = [
         team: "village",
         isNightRole: false,
         description: "All roles that detect wolves see the Lycan as a wolf.",
-        color: "bg-warning-subtle",
+        color: "warning",
         image: "",
     },
     {
@@ -55,7 +55,7 @@ export const roles = [
         isNightRole: true,
         description:
             "Each night, points to a player to learn if they are a wolf.",
-        color: "bg-info-subtle",
+        color: "info",
         image: "",
     },
     {
@@ -65,7 +65,7 @@ export const roles = [
         isNightRole: true,
         description:
             "Each night, points to a player to learn if they are a wolf, but should only be given a response after the seer has died.",
-        color: "bg-info-subtle",
+        color: "info",
         image: "",
     },
     {
@@ -75,7 +75,7 @@ export const roles = [
         isNightRole: false,
         description:
             "When the hunter dies, they may eliminate any other player.",
-        color: "bg-info-subtle",
+        color: "info",
         image: "",
     },
     {
@@ -85,7 +85,7 @@ export const roles = [
         isNightRole: true,
         description:
             "Learns who was killed that night. The witch may save 1 of the targets or choose to eliminate a new player. One use only.",
-        color: "bg-info-subtle",
+        color: "info",
         image: "",
     },
     {
@@ -95,7 +95,7 @@ export const roles = [
         isNightRole: true,
         description:
             "Each night, is asked to choose a player to protect. Can't choose themselves. If the priest is eliminate, the player that was given their blessing stays protected. One use only.",
-        color: "bg-info-subtle",
+        color: "info",
         image: "",
     },
     {
@@ -104,7 +104,7 @@ export const roles = [
         team: "village",
         isNightRole: false,
         description: "No special abilities.",
-        color: "bg-light-subtle",
+        color: "light",
         image: "",
     },
 ];
