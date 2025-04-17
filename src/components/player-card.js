@@ -81,6 +81,11 @@ export class PlayerCard {
         card.addEventListener("click", () => {
             showPlayerStatusModal({
                 player: this,
+                eliminateIcon: this.isEliminated
+                    ? "fa-solid fa-person-walking-arrow-loop-left"
+                    : "fa-solid fa-skull-crossbones",
+                eliminateLabel: this.isEliminated ? "Revive" : "Eliminate",
+                protectLabel: this.isProtected ? "Unprotect" : "Protect",
                 onProtect: () => {
                     if (this.isEliminated) return;
                     this.isProtected = !this.isProtected;

@@ -8,7 +8,14 @@
  * @param {function} player.onEliminate - Função chamada ao eliminar o jogador.
  */
 
-export const showPlayerStatusModal = ({ player, onProtect, onEliminate }) => {
+export const showPlayerStatusModal = ({
+    player,
+    eliminateIcon,
+    eliminateLabel,
+    protectLabel,
+    onProtect,
+    onEliminate,
+}) => {
     const existingModal = document.getElementById("player-status-modal");
     if (existingModal) existingModal.remove();
 
@@ -27,10 +34,10 @@ export const showPlayerStatusModal = ({ player, onProtect, onEliminate }) => {
                 </div>
                 <div class="modal-body">
                     <button class="btn btn-outline-danger" id="eliminate-btn">
-                        <i class="fa-solid fa-skull-crossbones"></i> Eliminate
+                        <i class="${eliminateIcon}"></i> ${eliminateLabel}
                     </button>
                     <button class="btn btn-outline-info" id="protect-btn">
-                        <i class="fa-solid fa-shield-alt"></i> Protect
+                        <i class="fa-solid fa-shield-alt"></i> ${protectLabel}
                     </button>
                 </div>
             </div>
